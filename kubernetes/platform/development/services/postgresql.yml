@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bnpl-postgres
+  labels:
+    db: bnpl-postgres
+spec:
+  selector:
+    matchLabels:
+      db: bnpl-postgres
+  template:
+    metadata:
+      labels:
+        db: bnpl-postgres
+    spec:
+      containers:
+        - name: bnpl-postgres
+          image: postgres:14.4
+          env:
+            - name: POSTGRES_USER
+              value: user
+            - name: POSTGRES_PASSWORD
+              value: password 
+            - name: POSTGRES_DB
+              value: bnpldb_catalog
+          resources:
+            requests:
+              cpu: 100m
+              memory: 60Mi
+            limits:
+              cpu: 200m
+              memory: 120Mi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: bnpl-postgres
+  labels:
+    db: bnpl-postgres
+spec:
+  type: ClusterIP
+  selector:
+    db: bnpl-postgres
+  ports:
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432
