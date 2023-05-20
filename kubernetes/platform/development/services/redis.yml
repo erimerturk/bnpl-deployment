@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bnpl-redis
+  labels:
+    db: bnpl-redis
+spec:
+  selector:
+    matchLabels:
+      db: bnpl-redis
+  template:
+    metadata:
+      labels:
+        db: bnpl-redis
+    spec:
+      containers:
+        - name: bnpl-redis
+          image: redis:7.0
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+            limits:
+              cpu: 200m
+              memory: 100Mi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: bnpl-redis
+  labels:
+    db: bnpl-redis
+spec:
+  type: ClusterIP
+  selector:
+    db: bnpl-redis
+  ports:
+  - protocol: TCP
+    port: 6379
+    targetPort: 6379

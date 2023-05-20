@@ -1,4 +1,7 @@
-include('../../../../config-service/Tiltfile')
-include('../../../../catalog-service/Tiltfile')
+include('../../../../bnpl-config-service/Tiltfile')
+include('../../../../bnpl-edge-service/Tiltfile')
+include('../../../../bnpl-order-service/Tiltfile')
+include('../../../../bnpl-catalog-service/Tiltfile')
+include('../../../../bnpl-dispatcher-service/Tiltfile')
 
 update_settings(max_parallel_updates=1)

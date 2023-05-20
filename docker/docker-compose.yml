@@ -24,6 +24,7 @@ services:
   bnpl-order-service:
     depends_on:
       - bnpl-postgres
+      - bnpl-rabbitmq
     image: "bnpl-order-service"
     container_name: "bnpl-order-service"
     ports:
@@ -37,6 +38,7 @@ services:
       - SPRING_CLOUD_CONFIG_URI=http://bnpl-config-service:8888
       - SPRING_R2DBC_URL=r2dbc:postgresql://bnpl-postgres:5432/bnpldb_order
       - SPRING_FLYWAY_URL=jdbc:postgresql://bnpl-postgres:5432/bnpldb_order
+      - SPRING_RABBITMQ_HOST=bnpl-rabbitmq
 
   bnpl-config-service:
     image: "bnpl-config-service"
@@ -51,6 +53,20 @@ services:
       - BPL_DEBUG_ENABLED=true
       - BPL_DEBUG_PORT=9888
 
+  bnpl-dispatcher-service:
+    depends_on:
+      - bnpl-rabbitmq
+    image: "bnpl-dispatcher-service"
+    container_name: bnpl-dispatcher-service
+    ports:
+      - 9003:9003
+      - 8003:8003
+    environment:
+      - BPL_DEBUG_ENABLED=true
+      - BPL_DEBUG_PORT=8003
+      - SPRING_CLOUD_CONFIG_URI=http://bnpl-config-service:8888
+      - SPRING_RABBITMQ_HOST=bnpl-rabbitmq
+
   # Backing Services
 
   bnpl-postgres:
@@ -63,3 +79,18 @@ services:
       - POSTGRES_PASSWORD=password
     volumes:
       - ./postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  bnpl-redis:
+    image: "redis:7.0"
+    container_name: "bnpl-redis"
+    ports:
+      - 6379:6379
+
+  bnpl-rabbitmq:
+    image: rabbitmq:3.10-management
+    container_name: bnpl-rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
