@@ -10,6 +10,28 @@ minikube addons enable ingress --profile bnpl
 
 sleep 15
 
+
+echo "\n📦 Deploying Keycloak..."
+
+kubectl apply -f services/keycloak-config.yml
+kubectl apply -f services/keycloak.yml
+
+sleep 5
+
+echo "\n⌛ Waiting for Keycloak to be deployed..."
+
+while [ $(kubectl get pod -l app=bnpl-keycloak | wc -l) -eq 0 ] ; do
+  sleep 5
+done
+
+echo "\n⌛ Waiting for Keycloak to be ready..."
+
+kubectl wait \
+  --for=condition=ready pod \
+  --selector=app=bnpl-keycloak \
+  --timeout=300s
+
+
 echo "\n📦 Deploying platform services..."
 
 kubectl apply -f services
