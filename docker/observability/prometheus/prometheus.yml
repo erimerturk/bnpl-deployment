@@ -1,0 +1,30 @@
+global:
+  scrape_interval: 2s
+
+scrape_configs:
+  - job_name: 'bnpl-edge-service'
+    scrape_interval: 2s
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'bnpl-edge-service:9000' ]
+  - job_name: 'bnpl-catalog-service'
+    scrape_interval: 2s
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'bnpl-catalog-service:9001' ]
+  - job_name: 'bnpl-order-service'
+    scrape_interval: 2s
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'bnpl-order-service:9002' ]
+  - job_name: 'bnpl-dispatcher-service'
+    scrape_interval: 2s
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'bnpl-dispatcher-service:9003' ]
+  - job_name: 'bnpl-config-service'
+    scrape_interval: 2s
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'bnpl-config-service:8888' ]
+  

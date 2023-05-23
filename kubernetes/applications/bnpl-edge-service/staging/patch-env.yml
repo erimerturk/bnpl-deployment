@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bnpl-edge-service
+spec:
+  template:
+    spec:
+      containers:
+        - name: bnpl-edge-service
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: staging

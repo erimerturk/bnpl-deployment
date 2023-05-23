@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - github.com/erimerturk/bnpl-dispatcher-service/k8s?ref=main
+
+patchesStrategicMerge:
+  - patch-env.yml
+
+configMapGenerator:
+  - behavior: merge
+    files:
+      - application-staging.yml
+    name: bnpl-dispatcher-config
+
+images:
+  - name: bnpl-dispatcher-service
+    newName: ghcr.io/erimerturk/bnpl-dispatcher-service
+    newTag: latest
+
+replicas:
+  - name: bnpl-dispatcher-service
+    count: 1

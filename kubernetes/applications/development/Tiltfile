@@ -1,4 +1,3 @@
-include('../../../../bnpl-config-service/Tiltfile')
 include('../../../../bnpl-edge-service/Tiltfile')
 include('../../../../bnpl-order-service/Tiltfile')
 include('../../../../bnpl-catalog-service/Tiltfile')
